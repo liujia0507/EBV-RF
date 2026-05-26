@@ -21,7 +21,7 @@ feature_names = bundle["feature_cols"]
 cutoff = bundle.get("cutoff", 0.5)
 
 # Streamlit 用户界面
-st.title("EBV-related Disease Prediction App (RF 4-Feature Model)")
+st.title("EBV Pathogenicity Prediction APP (RF 4-Feature Model)")
 st.caption(f"LOOCV AUC: {bundle.get('loocv_auc', float('nan')):.3f} | Youden Cutoff: {cutoff:.3f}")
 
 # 用户输入特征数据
