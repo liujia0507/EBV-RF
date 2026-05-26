@@ -7,7 +7,7 @@ import shap
 import matplotlib.pyplot as plt
 
 # 加载随机森林模型 (字典格式: {"model", "feature_cols", "cutoff", "loocv_auc"})
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "RF_4feature_final.pkl")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "EBV_RF_model.pkl")
 
 
 @st.cache_resource
