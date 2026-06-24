@@ -6,7 +6,7 @@ import pandas as pd
 import shap
 import matplotlib.pyplot as plt
 
-# 加载随机森林模型 (字典格式: {"model", "feature_cols", "cutoff", "loocv_auc"})
+# 加载随机森林模型 (字典格式: {"model", "feature_cols", "cutoff", ...})
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "EBV_RF_model.pkl")
 
 
@@ -21,11 +21,13 @@ feature_names = bundle["feature_cols"]
 cutoff = bundle.get("cutoff", 0.5)
 
 # Streamlit 用户界面
-st.title("EBV Pathogenicity Prediction APP (RF 4-Feature Model)")
-st.caption(f"LOOCV AUC: {bundle.get('loocv_auc', float('nan')):.3f} | Youden Cutoff: {cutoff:.3f}")
+st.title("EBV Pathogenicity Prediction APP (RF 6-Feature Model)")
+st.caption(
+    "Features: Co-infection, Relative abundance, DNA Reads, DNA/WBC, CCL, CGlu | "
+    f"Youden Cutoff: {cutoff:.3f}"
+)
 
-# 用户输入特征数据
-dna_wbc = st.selectbox("DNA/WBC (0 or 1):", options=[0, 1])
+# 用户输入特征数据 (顺序需与训练时一致)
 co_infection = st.selectbox("Co-infection (0 or 1):", options=[0, 1])
 relative_abundance = st.number_input(
     "Relative abundance (0-1):",
@@ -34,9 +36,18 @@ relative_abundance = st.number_input(
 dna_reads = st.number_input(
     "DNA Reads:", min_value=0, max_value=1000000, value=100, step=1
 )
+dna_wbc = st.selectbox("DNA/WBC (0 or 1):", options=[0, 1])
+ccl = st.number_input(
+    "CCL (CSF chloride, mmol/L):",
+    min_value=0.0, max_value=200.0, value=119.0, step=0.1, format="%.1f",
+)
+cglu = st.number_input(
+    "CGlu (CSF glucose, mmol/L):",
+    min_value=0.0, max_value=30.0, value=2.95, step=0.01, format="%.2f",
+)
 
-# 将输入的数据转化为模型的输入格式 (顺序与训练时一致)
-feature_values = [dna_wbc, co_infection, relative_abundance, dna_reads]
+# 将输入的数据转化为模型的输入格式 (顺序与 feature_cols 一致)
+feature_values = [co_infection, relative_abundance, dna_reads, dna_wbc, ccl, cglu]
 features_df = pd.DataFrame([feature_values], columns=feature_names)
 
 # 当点击按钮时进行预测
