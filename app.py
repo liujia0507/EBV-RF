@@ -101,9 +101,18 @@ if st.button("Predict"):
             sv = shap_values
             expected_value = explainer.expected_value
 
-        shap.force_plot(expected_value, sv, X_imputed, matplotlib=True, show=False)
+        # 瀑布图 (waterfall plot)
+        shap.plots.waterfall(
+            shap.Explanation(
+                values=sv[0],
+                base_values=expected_value,
+                data=X_imputed.iloc[0],
+                feature_names=feature_names,
+            ),
+            show=False,
+        )
 
-        out_path = os.path.join(os.path.dirname(__file__), "shap_force_plot.png")
+        out_path = os.path.join(os.path.dirname(__file__), "shap_waterfall_plot.png")
         plt.savefig(out_path, bbox_inches="tight", dpi=300)
         plt.close()
         st.image(out_path)
