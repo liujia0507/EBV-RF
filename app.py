@@ -90,18 +90,21 @@ if st.button("Predict"):
         explainer = shap.TreeExplainer(clf)
         shap_values = explainer.shap_values(X_imputed)
 
-        # 兼容新旧版 shap 输出格式
+        # 兼容新旧版 shap 输出格式；始终展示 class 1 (EBV) 的瀑布图
         if isinstance(shap_values, list):
-            sv = shap_values[predicted_class]
-            expected_value = explainer.expected_value[predicted_class]
+            sv = shap_values[1]  # class 1 = EBV
+            expected_value = explainer.expected_value[1]
         elif isinstance(shap_values, np.ndarray) and shap_values.ndim == 3:
-            sv = shap_values[:, :, predicted_class]
-            expected_value = explainer.expected_value[predicted_class]
+            sv = shap_values[:, :, 1]  # class 1 = EBV
+            expected_value = explainer.expected_value[1]
         else:
             sv = shap_values
             expected_value = explainer.expected_value
 
-        # 瀑布图 (waterfall plot)
+        # 瀑布图 (waterfall plot) — 显式区分正负颜色
+        # 正向贡献用红色，负向贡献用蓝色
+        shap.plots.colors.red_rgb = (0.86, 0.08, 0.24)     # 猩红色
+        shap.plots.colors.blue_rgb = (0.12, 0.56, 1.0)    # 道奇蓝
         shap.plots.waterfall(
             shap.Explanation(
                 values=sv[0],
