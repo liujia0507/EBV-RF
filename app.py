@@ -103,8 +103,8 @@ if st.button("Predict"):
 
         # 瀑布图 (waterfall plot) — 显式区分正负颜色
         # 正向贡献用红色，负向贡献用蓝色
-        shap.plots.colors.red_rgb = "#E64B35"     # 猩红色
-        shap.plots.colors.blue_rgb = "#4DBBD5"    # 道奇蓝
+        shap.plots.colors.red_rgb = "#e61772"     # 猩红色
+        shap.plots.colors.blue_rgb = "#2ea7e0"    # 道奇蓝
         shap.plots.waterfall(
             shap.Explanation(
                 values=sv[0],
