@@ -113,8 +113,18 @@ if st.button("Predict"):
         )
 
         out_path = os.path.join(os.path.dirname(__file__), "shap_waterfall_plot.png")
+        svg_path = os.path.join(os.path.dirname(__file__), "shap_waterfall_plot.svg")
         plt.savefig(out_path, bbox_inches="tight", dpi=300)
+        plt.savefig(svg_path, bbox_inches="tight", format="svg")
         plt.close()
         st.image(out_path)
+
+        with open(svg_path, "rb") as f:
+            st.download_button(
+                label="📥 Download SHAP Waterfall Plot (SVG)",
+                data=f,
+                file_name="shap_waterfall_plot.svg",
+                mime="image/svg+xml",
+            )
     except Exception as e:
         st.warning(f"SHAP visualization failed: {e}")
