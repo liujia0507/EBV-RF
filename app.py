@@ -29,14 +29,13 @@ st.caption(
 
 # 用户输入特征数据 (顺序需与训练时一致)
 co_infection = st.selectbox("Co-infection (0 or 1):", options=[0, 1])
+dna_reads = st.number_input(
+    "DNA Reads:", min_value=0, max_value=1000000, value=100, step=1
+)
 relative_abundance = st.number_input(
     "Relative abundance (0-1):",
     min_value=0.0, max_value=1.0, value=0.5, step=0.01, format="%.4f",
 )
-dna_reads = st.number_input(
-    "DNA Reads:", min_value=0, max_value=1000000, value=100, step=1
-)
-dna_wbc = st.selectbox("DNA/WBC (0 or 1):", options=[0, 1])
 ccl = st.number_input(
     "CCL (CSF chloride, mmol/L):",
     min_value=0.0, max_value=200.0, value=119.0, step=0.1, format="%.1f",
@@ -45,6 +44,7 @@ cglu = st.number_input(
     "CGlu (CSF glucose, mmol/L):",
     min_value=0.0, max_value=30.0, value=2.95, step=0.01, format="%.2f",
 )
+dna_wbc = st.selectbox("DNA/WBC (0 or 1):", options=[0, 1])
 
 # 将输入的数据转化为模型的输入格式 (顺序与 feature_cols 一致)
 feature_values = [co_infection, relative_abundance, dna_reads, dna_wbc, ccl, cglu]
@@ -103,8 +103,8 @@ if st.button("Predict"):
 
         # 瀑布图 (waterfall plot) — 显式区分正负颜色
         # 正向贡献用红色，负向贡献用蓝色
-        shap.plots.colors.red_rgb = "#e61772"     # 猩红色
-        shap.plots.colors.blue_rgb = "#2ea7e0"    # 道奇蓝
+        shap.plots.colors.red_rgb = "#e84494"     # 猩红色
+        shap.plots.colors.blue_rgb = "#2a9fd8"    # 道奇蓝
         shap.plots.waterfall(
             shap.Explanation(
                 values=sv[0],
