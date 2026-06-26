@@ -41,7 +41,8 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-打开 http://localhost:8501 即可使用。
+本地启动应用后，在浏览器中打开 http://localhost:8501 即可访问预测界面。此外，本项目还提供在线部署版本，用户无需在本地运行程序，访问 https://ebv-pathogenicity-prediction-app.streamlit.app/ 即可直接使用应用。
+
 
 ## 部署到 Streamlit Community Cloud
 
