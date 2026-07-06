@@ -27,6 +27,34 @@ st.caption(
     f"Youden Cutoff: {cutoff:.3f}"
 )
 
+# 统一修改页面内除去标题的字体大小为 15px
+st.markdown(
+    """
+    <style>
+    /* 除 h1 标题外，统一正文字体大小 */
+    .stMarkdown,
+    .stMarkdown p,
+    .stMarkdown li,
+    div[data-testid="stMarkdownContainer"] p,
+    div[data-testid="stMarkdownContainer"] li,
+    .st-caption,
+    .stButton button,
+    div[data-testid="stCaptionContainer"],
+    div[data-testid="stWidgetLabel"],
+    /* 输入框和下拉框整体（含内部文字） */
+    .stSelectbox *,
+    .stNumberInput *,
+    [data-baseweb="select"] *,
+    [data-baseweb="input"] *,
+    input {
+        font-size: 25px !important;
+    }
+    /* 保持标题大小不变（不做修改） */
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # 用户输入特征数据 (顺序需与训练时一致)
 co_infection = st.selectbox("Co-infection (0 or 1):", options=[0, 1])
 dna_reads = st.number_input(
@@ -58,24 +86,24 @@ if st.button("Predict"):
     predicted_class = int(prob_positive >= cutoff)
 
     # 显示预测结果
-    st.write(f"**Predicted Class:** {predicted_class} (0: Non-EBV-related, 1: EBV-related)")
+    st.write(f"**Predicted Class:** {predicted_class} (0: colonized, 1: pathogenic)")
     st.write(
-        f"**Prediction Probabilities:** [Non-EBV: {predicted_proba[0]:.4f}, "
-        f"EBV: {predicted_proba[1]:.4f}]"
+        f"**Prediction Probabilities:** [colonized: {predicted_proba[0]:.4f}, "
+        f"pathogenic: {predicted_proba[1]:.4f}]"
     )
     st.write(f"**Decision Cutoff (Youden):** {cutoff:.3f}")
 
     # 根据预测结果提供建议
     if predicted_class == 1:
         advice = (
-            f"According to our model, this case has a high risk of being EBV-related. "
-            f"The predicted probability of EBV-related disease is {prob_positive*100:.1f}%. "
-            "We recommend further clinical evaluation and EBV-targeted testing."
+            f"According to our model, this case has a high risk of being pathogenic. "
+            f"The predicted probability of pathogenic is {prob_positive*100:.1f}%. "
+            "We recommend further clinical evaluation."
         )
     else:
         advice = (
-            f"According to our model, this case has a low risk of being EBV-related. "
-            f"The predicted probability of NOT being EBV-related is {(1-prob_positive)*100:.1f}%. "
+            f"According to our model, this case has a low risk of being pathogenic. "
+            f"The predicted probability of  colonized is {(1-prob_positive)*100:.1f}%. "
             "However, clinical correlation is still recommended."
         )
 
